@@ -1,18 +1,29 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <NavBar />
+    <SearchComponent @search="search" />
+    <ResultsComponent :searchTerm="currentSearchTerm" />
   </div>
 </template>
+<script setup>
+import { ref } from "vue";
+import NavBar from "../components/NavBar.vue";
+import ResultsComponent from "../components/ResultsComponent.vue";
+import SearchComponent from "../components/SearchComponent.vue";
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+const currentSearchTerm = ref("");
 
-export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
-}
+const search = (term) => {
+  currentSearchTerm.value = term;
+};
 </script>
+<style scoped lang="scss">
+.home {
+  padding: 20px auto;
+  max-width: 600px;
+  margin: auto;
+  gap: 45px;
+  display: flex;
+  flex-direction: column;
+}
+</style>
