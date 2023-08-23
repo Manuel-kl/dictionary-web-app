@@ -169,6 +169,7 @@ const playAudio = () => {
   display: flex;
   flex-direction: column;
   gap: 45px;
+  padding-bottom: 45px;
 
   .word {
     display: flex;
@@ -189,6 +190,10 @@ const playAudio = () => {
         font-style: normal;
         font-weight: 700;
         line-height: normal;
+
+        @media (max-width: 375px) {
+          font-size: 32px;
+        }
       }
 
       p {
@@ -199,6 +204,10 @@ const playAudio = () => {
         font-style: normal;
         font-weight: 400;
         line-height: normal;
+
+        @media (max-width: 375px) {
+          font-size: 15px;
+        }
       }
     }
     .right {
@@ -206,6 +215,12 @@ const playAudio = () => {
       height: 75px;
       flex-shrink: 0;
       cursor: pointer;
+
+      @media (max-width: 375px) {
+        svg {
+          width: 48px;
+        }
+      }
     }
   }
 
@@ -228,6 +243,10 @@ const playAudio = () => {
         font-style: normal;
         font-weight: 400;
         line-height: normal;
+
+        @media (max-width: 375px) {
+          font-size: 18px;
+        }
       }
 
       span {
@@ -245,6 +264,10 @@ const playAudio = () => {
       font-style: normal;
       font-weight: 400;
       line-height: normal;
+
+      @media (max-width: 375px) {
+        font-size: 16px;
+      }
     }
 
     ul.definition {
@@ -265,6 +288,10 @@ const playAudio = () => {
         &::marker {
           color: $purple-shade;
         }
+
+        @media (max-width: 375px) {
+          font-size: 15px;
+        }
       }
     }
 
@@ -281,6 +308,10 @@ const playAudio = () => {
         font-style: normal;
         font-weight: 400;
         line-height: normal;
+
+        @media (max-width: 375px) {
+          font-size: 16px;
+        }
       }
 
       ul {
@@ -299,6 +330,10 @@ const playAudio = () => {
           line-height: normal;
           list-style: none;
           flex-basis: auto;
+
+          @media (max-width: 375px) {
+            font-size: 16px;
+          }
         }
       }
     }
@@ -308,6 +343,12 @@ const playAudio = () => {
     flex-direction: row;
     align-items: center;
     gap: 24px;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
 
     h4 {
       color: $medium-gray;
@@ -341,7 +382,7 @@ const playAudio = () => {
           width: 12px;
           height: 12px;
           flex-shrink: 0;
-          margin-left: 15px;
+          margin-left: 7px;
 
           &:hover {
             cursor: pointer;
@@ -357,7 +398,16 @@ const playAudio = () => {
   align-items: center;
   gap: 24px;
   padding-top: 72px;
-  height: 100vh;
+
+  .emoji {
+    span {
+      font-size: 64px;
+
+      @media (max-width: 375px) {
+        font-size: 48px;
+      }
+    }
+  }
 
   h4 {
     color: $dark-gray-2;
@@ -367,6 +417,10 @@ const playAudio = () => {
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+
+    @media (max-width: 375px) {
+      font-size: 16px;
+    }
   }
 
   p {
@@ -378,6 +432,10 @@ const playAudio = () => {
     font-style: normal;
     font-weight: 400;
     line-height: 24px;
+
+    @media (max-width: 375px) {
+      font-size: 15px;
+    }
   }
 }
 </style>

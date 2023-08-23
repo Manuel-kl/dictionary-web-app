@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <NavBar @changeFont="font" />
+    <NavBar @changeFont="font" @changeMode="mode" />
     <SearchComponent @search="search" />
     <ResultsComponent
       :searchTerm="currentSearchTerm"
@@ -24,6 +24,10 @@ const search = (term) => {
 const font = (font) => {
   selectedFont.value = font;
 };
+
+const mode = (mode) => {
+  console.log(mode);
+};
 </script>
 <style scoped lang="scss">
 @import "../sass/variables.scss";
@@ -36,5 +40,14 @@ const font = (font) => {
   gap: 45px;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+
+  @media (max-width: 600px) {
+    padding: 20px;
+  }
+
+  @media (max-width: 375px) {
+    padding: 20px 10px;
+  }
 }
 </style>

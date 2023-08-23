@@ -40,6 +40,7 @@ const handleInput = () => {
   position: relative;
   input {
     flex: 1;
+    width: 100%;
     padding: 20px 50px 20px 20px;
     flex-shrink: 0;
     background: $light-gray-2;
@@ -54,12 +55,22 @@ const handleInput = () => {
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+
     &::placeholder {
       font-family: $inter-font;
       font-size: 20px;
       font-style: normal;
       font-weight: 400;
       line-height: normal;
+
+      @media (max-width: 375px) {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 375px) {
+      font-size: 16px;
+      padding: 14px 16px;
     }
 
     &:focus {
@@ -71,6 +82,11 @@ const handleInput = () => {
     position: absolute;
     z-index: 3;
     right: 20px;
+
+    @media (max-width: 375px) {
+      width: 15px;
+      height: 15px;
+    }
   }
 }
 </style>

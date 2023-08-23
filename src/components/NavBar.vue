@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar" :style="darkNav">
+  <nav class="navbar" :class="darkNav">
     <div class="navbar-logo">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +124,11 @@ import { computed, defineEmits, ref } from "vue";
 const selectedFont = ref("Sans Serif");
 const optionsOpen = ref(false);
 const dark = ref(false);
-const emit = defineEmits(["changeFont"]);
+const emit = defineEmits(["changeFont", "changeMode"]);
+
+const darkNav = computed(() => {
+  return dark.value ? "darkNav" : "";
+});
 
 const fontStyles = computed(() => {
   switch (selectedFont.value) {
@@ -151,6 +155,7 @@ const showOptions = () => {
 
 const changeMode = () => {
   dark.value = !dark.value;
+  emit("changeMode", dark.value);
 };
 </script>
 
@@ -167,6 +172,13 @@ nav.navbar {
     width: 32px;
     height: 36.5px;
     flex-shrink: 0;
+
+    svg {
+      @media (max-width: 375px) {
+        width: 28px;
+        height: 32px;
+      }
+    }
   }
 
   .right {
@@ -185,6 +197,11 @@ nav.navbar {
       border-right: 1px solid $light-gray-2;
       position: relative;
 
+      @media (max-width: 375px) {
+        gap: 3px;
+        padding-right: 10px;
+      }
+
       h5.selected {
         color: $dark-gray-2;
         font-family: $inter-font;
@@ -194,6 +211,10 @@ nav.navbar {
         cursor: pointer;
         line-height: $body-m-line-height;
         transition: all 0.3s ease-in-out;
+
+        @media (max-width: 375px) {
+          font-size: 14px;
+        }
       }
 
       .options {
@@ -225,10 +246,18 @@ nav.navbar {
             color: $purple-shade;
             transition: all 0.3s ease-in-out;
           }
+
+          @media (max-width: 375px) {
+            font-size: 16px;
+          }
         }
 
         h5.sans-serif {
           font-family: $inter-font;
+
+          @media (max-width: 375px) {
+            font-size: 16px;
+          }
         }
 
         h5.serif {
@@ -237,17 +266,37 @@ nav.navbar {
 
         h5.mono {
           font-family: $incosolata-font;
+
+          @media (max-width: 375px) {
+            font-size: 16px;
+          }
         }
       }
 
       svg {
         cursor: pointer;
+
+        @media (max-width: 375px) {
+          width: 12px;
+          height: 6px;
+        }
       }
     }
 
     .mode {
       cursor: pointer;
       margin-left: 20px;
+
+      @media (max-width: 375px) {
+        margin-left: 10px;
+      }
+
+      svg {
+        @media (max-width: 375px) {
+          width: 71.993px;
+          height: 20px;
+        }
+      }
 
       .hover {
         display: none;
@@ -260,6 +309,28 @@ nav.navbar {
 
         .hover {
           display: inline-flex;
+        }
+      }
+    }
+  }
+}
+nav.darkNav {
+  background-color: $black;
+
+  .right {
+    .font {
+      h5.selected {
+        color: $white;
+      }
+
+      .options {
+        background: $dark-gray-1;
+        box-shadow: 0px 5px 30px 0px $purple-shade;
+        h5.option {
+          color: $white;
+          &:hover {
+            color: $purple-shade;
+          }
         }
       }
     }
