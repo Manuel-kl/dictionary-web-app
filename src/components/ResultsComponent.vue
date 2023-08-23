@@ -1,9 +1,9 @@
 <template>
-  <div v-if="wordData" class="results">
+  <div v-if="definitionFound" class="results">
     <div class="word">
       <div class="left">
-        <h1>{{ wordData[0].word }}</h1>
-        <p>{{ wordData[0].phonetics[0].text }}</p>
+        <h1 :style="fontStyles">{{ wordData[0].word }}</h1>
+        <p :style="fontStyles">{{ wordData[0].phonetics[0].text }}</p>
       </div>
       <div class="right" v-if="wordData[0].phonetics[0].audio != ''">
         <audio :src="wordData[0].phonetics[0].audio"></audio>
@@ -32,23 +32,27 @@
       :key="meaning.id"
     >
       <div class="type">
-        <p>{{ meaning.partOfSpeech }}</p>
+        <p :style="fontStyles">{{ meaning.partOfSpeech }}</p>
         <span></span>
       </div>
-      <h4>Meaning</h4>
+      <h4 :style="fontStyles">Meaning</h4>
       <ul
         class="definition"
         v-for="definition in meaning.definitions"
         :key="definition.id"
       >
-        <li>
+        <li :style="fontStyles">
           {{ definition.definition }}
         </li>
       </ul>
       <div class="synonyms">
-        <h4>Synonyms:</h4>
+        <h4 :style="fontStyles">Synonyms:</h4>
         <ul>
-          <li v-for="synonym in meaning.synonyms" :key="synonym.id">
+          <li
+            v-for="synonym in meaning.synonyms"
+            :key="synonym.id"
+            :style="fontStyles"
+          >
             {{ synonym }}
           </li>
           <li v-if="meaning.synonyms == ''">____</li>
@@ -56,8 +60,8 @@
       </div>
     </div>
     <div class="source">
-      <h4>Source</h4>
-      <p>
+      <h4 :style="fontStyles">Source</h4>
+      <p :style="fontStyles">
         <a :href="wordData[0].sourceUrls[0]" target="_blank"
           >{{ wordData[0].sourceUrls[0] }}
           <span>
@@ -78,18 +82,38 @@
       </p>
     </div>
   </div>
+  <div class="error" v-if="noDefinitionFound">
+    <div class="emoji">
+      <span> 😕 </span>
+    </div>
+    <h4 :style="fontStyles">No Definitions Found</h4>
+    <div class="description">
+      <p :style="fontStyles">
+        Sorry pal, we couldn't find definitions for the word you were looking
+        for. You can try the search again at later time or head to the web
+        instead.
+      </p>
+    </div>
+  </div>
 </template>
 <script setup>
 import axios from "axios";
-import { defineProps, ref, watch } from "vue";
+import { computed, defineProps, ref, watch } from "vue";
+
+const selectedFont = ref("Sans Serif");
 
 const props = defineProps({
   searchTerm: {
     required: true,
   },
+  currentFont: {
+    required: true,
+  },
 });
 
 let wordData = ref(null);
+const noDefinitionFound = ref(false);
+const definitionFound = ref(false);
 
 watch(
   () => props.searchTerm,
@@ -98,15 +122,38 @@ watch(
   }
 );
 
+watch(
+  () => props.currentFont,
+  () => {
+    console.log(props.currentFont);
+    selectedFont.value = props.currentFont;
+  }
+);
+
+const fontStyles = computed(() => {
+  switch (selectedFont.value) {
+    case "Sans Serif":
+      return { fontFamily: "'Inter', sans-serif" };
+    case "Serif":
+      return { fontFamily: "'Lora', serif" };
+    case "Mono":
+      return { fontFamily: "'Incosolata', monospace" };
+    default:
+      return {};
+  }
+});
+
 const searchDefinition = async () => {
   try {
     const response = await axios.get(
       `https://api.dictionaryapi.dev/api/v2/entries/en/${props.searchTerm}`
     );
-    console.log(response.data);
     wordData.value = response.data;
+    definitionFound.value = true;
+    noDefinitionFound.value = false;
   } catch (error) {
-    console.error("Error fetching word data:" + error);
+    definitionFound.value = false;
+    noDefinitionFound.value = true;
   }
 };
 
@@ -302,6 +349,35 @@ const playAudio = () => {
         }
       }
     }
+  }
+}
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding-top: 72px;
+  height: 100vh;
+
+  h4 {
+    color: $dark-gray-2;
+    text-align: center;
+    font-family: $inter-font;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  p {
+    color: $medium-gray;
+    text-align: center;
+    font-feature-settings: "clig" off, "liga" off;
+    font-family: $inter-font;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
   }
 }
 </style>

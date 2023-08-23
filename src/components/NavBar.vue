@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar">
+  <nav class="navbar" :style="darkNav">
     <div class="navbar-logo">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -29,7 +29,9 @@
     </div>
     <div class="right">
       <div class="font">
-        <h5 class="selected" @click="showOptions">{{ selectedFont }}</h5>
+        <h5 class="selected" @click="showOptions" :style="fontStyles">
+          {{ selectedFont }}
+        </h5>
         <div class="options" v-if="optionsOpen">
           <h5 class="option sans-serif" @click="changeFont('San Serif')">
             Sans Serif
@@ -117,15 +119,30 @@
   </nav>
 </template>
 <script setup>
-import { ref } from "vue";
+import { computed, defineEmits, ref } from "vue";
 
 const selectedFont = ref("Sans Serif");
 const optionsOpen = ref(false);
 const dark = ref(false);
+const emit = defineEmits(["changeFont"]);
+
+const fontStyles = computed(() => {
+  switch (selectedFont.value) {
+    case "Sans Serif":
+      return { fontFamily: "'Inter', sans-serif" };
+    case "Serif":
+      return { fontFamily: "'Lora', serif" };
+    case "Mono":
+      return { fontFamily: "Inconsolata', monospace" };
+    default:
+      return {};
+  }
+});
 
 const changeFont = (font) => {
   selectedFont.value = font;
   optionsOpen.value = false;
+  emit("changeFont", font);
 };
 
 const showOptions = () => {
@@ -136,6 +153,7 @@ const changeMode = () => {
   dark.value = !dark.value;
 };
 </script>
+
 <style scoped lang="scss">
 @import "../sass/variables.scss";
 @import "../sass/global.scss";

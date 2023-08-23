@@ -1,8 +1,11 @@
 <template>
-  <div class="home">
-    <NavBar />
+  <div id="home">
+    <NavBar @changeFont="font" />
     <SearchComponent @search="search" />
-    <ResultsComponent :searchTerm="currentSearchTerm" />
+    <ResultsComponent
+      :searchTerm="currentSearchTerm"
+      :currentFont="selectedFont"
+    />
   </div>
 </template>
 <script setup>
@@ -12,14 +15,22 @@ import ResultsComponent from "../components/ResultsComponent.vue";
 import SearchComponent from "../components/SearchComponent.vue";
 
 const currentSearchTerm = ref("");
+const selectedFont = ref("");
 
 const search = (term) => {
   currentSearchTerm.value = term;
 };
+
+const font = (font) => {
+  selectedFont.value = font;
+};
 </script>
 <style scoped lang="scss">
-.home {
-  padding: 20px auto;
+@import "../sass/variables.scss";
+@import "../sass/global.scss";
+
+#home {
+  padding: 20px 40px;
   max-width: 600px;
   margin: auto;
   gap: 45px;
