@@ -1,5 +1,5 @@
 <template>
-  <div class="search">
+  <div class="search" :class="searchDarkMode">
     <input
       type="text"
       placeholder="Search for any word..."
@@ -21,13 +21,31 @@
   </div>
 </template>
 <script setup>
-import { defineEmits, ref } from "vue";
+import { computed, defineEmits, ref, watch } from "vue";
 const emit = defineEmits(["search"]);
 const searchTerm = ref("");
+const darkMode = ref(false);
 
 const handleInput = () => {
   emit("search", searchTerm.value);
 };
+
+const props = defineProps({
+  isDark: {
+    required: true,
+  },
+});
+
+watch(
+  () => props.isDark,
+  (value) => {
+    darkMode.value = value;
+  }
+);
+
+const searchDarkMode = computed(() => {
+  return darkMode.value ? "darkMode" : "";
+});
 </script>
 <style scoped lang="scss">
 @import "../sass/variables.scss";
@@ -86,6 +104,18 @@ const handleInput = () => {
     @media (max-width: 375px) {
       width: 15px;
       height: 15px;
+    }
+  }
+}
+
+.darkMode {
+  input {
+    background: $dark-gray-1;
+    color: $white;
+    transition: all 1s ease;
+    border-radius: 16px;
+    &::placeholder {
+      color: $medium-gray;
     }
   }
 }

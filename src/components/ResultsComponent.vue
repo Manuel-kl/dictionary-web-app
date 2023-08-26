@@ -2,11 +2,18 @@
   <div v-if="definitionFound" class="results" :class="resultsDarkMode">
     <div class="word">
       <div class="left">
-        <h1 :style="fontStyles">{{ wordData[0].word }}</h1>
-        <p :style="fontStyles">{{ wordData[0].phonetics[0].text }}</p>
+        <h1 :style="fontStyles">
+          {{ wordData[0].word }}
+        </h1>
+        <p :style="fontStyles">
+          {{ wordData[0].phonetics[0].text }}
+        </p>
       </div>
-      <div class="right" v-if="wordData[0].phonetics[0].audio != ''">
-        <audio :src="wordData[0].phonetics[0].audio"></audio>
+      <div class="right" v-if="wordData[0].phonetics[0].audio">
+        <audio
+          v-if="wordData[0].phonetics[0].audio != ''"
+          :src="wordData[0].phonetics[0].audio"
+        ></audio>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="75"
@@ -44,19 +51,15 @@
       </div>
     </div>
 
-    <div
-      class="meaning"
-      v-for="meaning in wordData[0].meanings"
-      :key="meaning.id"
-    >
+    <div class="meaning" v-if="wordData[0].meanings[0]">
       <div class="type">
-        <p :style="fontStyles">{{ meaning.partOfSpeech }}</p>
+        <p :style="fontStyles">{{ wordData[0].meanings[0].partOfSpeech }}</p>
         <span></span>
       </div>
       <h4 :style="fontStyles">Meaning</h4>
       <ul
         class="definition"
-        v-for="definition in meaning.definitions"
+        v-for="definition in wordData[0].meanings[0].definitions"
         :key="definition.id"
       >
         <li :style="fontStyles">
@@ -67,15 +70,48 @@
         <h4 :style="fontStyles">Synonyms:</h4>
         <ul>
           <li
-            v-for="synonym in meaning.synonyms"
+            v-for="synonym in wordData[0].meanings[0].synonyms"
             :key="synonym.id"
             :style="fontStyles"
           >
             {{ synonym }}
           </li>
-          <li v-if="meaning.synonyms == ''">____</li>
+          <li v-if="wordData[0].meanings[0].synonyms == ''">____</li>
         </ul>
       </div>
+    </div>
+    <div class="meaning" v-if="wordData[0].meanings[1]">
+      <div class="type">
+        <p :style="fontStyles">{{ wordData[0].meanings[1].partOfSpeech }}</p>
+        <span></span>
+      </div>
+      <h4 :style="fontStyles">Meaning</h4>
+      <ul
+        class="definition"
+        v-for="definition in wordData[0].meanings[1].definitions"
+        :key="definition.id"
+      >
+        <li :style="fontStyles">
+          {{ definition.definition }}
+          <p v-if="definition.example">"{{ definition.example }}"</p>
+        </li>
+      </ul>
+    </div>
+    <div class="meaning" v-if="wordData[0].meanings[2]">
+      <div class="type">
+        <p :style="fontStyles">{{ wordData[0].meanings[2].partOfSpeech }}</p>
+        <span></span>
+      </div>
+      <h4 :style="fontStyles">Meaning</h4>
+      <ul
+        class="definition"
+        v-for="definition in wordData[0].meanings[2].definitions"
+        :key="definition.id"
+      >
+        <li :style="fontStyles">
+          {{ definition.definition }}
+        </li>
+      </ul>
     </div>
     <div class="source">
       <h4 :style="fontStyles">Source</h4>
@@ -325,6 +361,16 @@ const playAudio = () => {
           color: $purple-shade;
         }
 
+        p {
+          color: $medium-gray;
+          font-feature-settings: "clig" off, "liga" off;
+          font-family: $inter-font;
+          font-size: 18px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 24px;
+          margin-top: 13px;
+        }
         @media (max-width: 375px) {
           font-size: 15px;
         }
@@ -534,6 +580,10 @@ const playAudio = () => {
     p {
       a {
         color: $white;
+
+        &:visited {
+          color: $white;
+        }
         span {
           path {
             fill: $medium-gray;
