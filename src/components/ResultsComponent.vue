@@ -1,5 +1,5 @@
 <template>
-  <div v-if="definitionFound" class="results">
+  <div v-if="definitionFound" class="results" :class="resultsDarkMode">
     <div class="word">
       <div class="left">
         <h1 :style="fontStyles">{{ wordData[0].word }}</h1>
@@ -14,6 +14,7 @@
           viewBox="0 0 75 75"
           fill="none"
           @click="playAudio"
+          v-if="!resultsDarkMode"
         >
           <circle opacity="0.25" cx="37.5" cy="37.5" r="37.5" fill="#A445ED" />
           <path
@@ -21,6 +22,23 @@
             clip-rule="evenodd"
             d="M29 27V48L50 37.5L29 27Z"
             fill="#A445ED"
+          />
+        </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="75"
+          height="75"
+          viewBox="0 0 75 75"
+          fill="none"
+          @click="playAudio"
+          v-if="resultsDarkMode"
+        >
+          <circle cx="37.5" cy="37.5" r="37.5" fill="#A445ED" />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M29 27V48L50 37.5L29 27Z"
+            fill="white"
           />
         </svg>
       </div>
@@ -82,7 +100,7 @@
       </p>
     </div>
   </div>
-  <div class="error" v-if="noDefinitionFound">
+  <div class="error" v-if="noDefinitionFound" :class="errorDarkMode">
     <div class="emoji">
       <span> 😕 </span>
     </div>
@@ -109,11 +127,15 @@ const props = defineProps({
   currentFont: {
     required: true,
   },
+  isDark: {
+    required: true,
+  },
 });
 
 let wordData = ref(null);
 const noDefinitionFound = ref(false);
 const definitionFound = ref(false);
+const isDark = ref(false);
 
 watch(
   () => props.searchTerm,
@@ -125,10 +147,23 @@ watch(
 watch(
   () => props.currentFont,
   () => {
-    console.log(props.currentFont);
     selectedFont.value = props.currentFont;
   }
 );
+
+watch(
+  () => props.isDark,
+  () => {
+    isDark.value = props.isDark;
+  }
+);
+
+const resultsDarkMode = computed(() => {
+  return isDark.value ? "resultsDarkMode" : "";
+});
+const errorDarkMode = computed(() => {
+  return isDark.value ? "errorDarkMode" : "";
+});
 
 const fontStyles = computed(() => {
   switch (selectedFont.value) {
@@ -151,6 +186,7 @@ const searchDefinition = async () => {
     wordData.value = response.data;
     definitionFound.value = true;
     noDefinitionFound.value = false;
+    console.log(wordData.value);
   } catch (error) {
     definitionFound.value = false;
     noDefinitionFound.value = true;
@@ -417,6 +453,7 @@ const playAudio = () => {
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    transition: all 1s ease;
 
     @media (max-width: 375px) {
       font-size: 16px;
@@ -432,10 +469,89 @@ const playAudio = () => {
     font-style: normal;
     font-weight: 400;
     line-height: 24px;
+    transition: all 1s ease;
 
     @media (max-width: 375px) {
       font-size: 15px;
     }
+  }
+}
+
+.resultsDarkMode {
+  color: $light-gray-1;
+  .word {
+    .left {
+      h1 {
+        color: $white;
+      }
+      p {
+        color: $purple-shade;
+      }
+    }
+    .right {
+      svg {
+        path {
+          fill: $white;
+        }
+      }
+    }
+  }
+  .meaning {
+    .type {
+      p {
+        color: $light-gray-1;
+      }
+      span {
+        background: $dark-gray-3;
+      }
+    }
+    h4 {
+      color: $medium-gray;
+    }
+    ul.definition {
+      li {
+        color: $white;
+        &::marker {
+          color: $purple-shade;
+        }
+      }
+    }
+    .synonyms {
+      h4 {
+        color: $medium-gray;
+      }
+      ul {
+        li {
+          color: $purple-shade;
+        }
+      }
+    }
+  }
+  .source {
+    h4 {
+      color: $medium-gray;
+    }
+    p {
+      a {
+        color: $white;
+        span {
+          path {
+            fill: $medium-gray;
+          }
+        }
+      }
+    }
+  }
+}
+
+.errorDarkMode {
+  h4 {
+    color: $white;
+    transition: all 1s ease;
+  }
+  p {
+    color: $medium-gray;
+    transition: all 1s ease;
   }
 }
 </style>

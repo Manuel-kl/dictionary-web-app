@@ -4,5 +4,7 @@
 </template>
 <script setup>
 </script>
-<style>
+<style lang="scss" >
+@import "./sass/variables.scss";
+@import "./sass/global.scss";
 </style>

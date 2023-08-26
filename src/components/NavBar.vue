@@ -315,12 +315,11 @@ nav.navbar {
   }
 }
 nav.darkNav {
-  background-color: $black;
-
   .right {
     .font {
       h5.selected {
         color: $white;
+        transition: all 1s ease;
       }
 
       .options {
@@ -328,6 +327,8 @@ nav.darkNav {
         box-shadow: 0px 5px 30px 0px $purple-shade;
         h5.option {
           color: $white;
+          transition: all 1s ease;
+
           &:hover {
             color: $purple-shade;
           }
